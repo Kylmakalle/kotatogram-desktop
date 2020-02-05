@@ -23,6 +23,7 @@ FontsBox::FontsBox(QWidget* parent)
 , _semiboldFontName(this, st::defaultInputField, tr::ktg_fonts_semibold())
 , _semiboldIsBold(this, tr::ktg_fonts_semibold_is_bold(tr::now), cSemiboldFontIsBold())
 , _monospacedFontName(this, st::defaultInputField, tr::ktg_fonts_monospaced())
+, _useOriginalMetrics(this, tr::ktg_fonts_use_original_metrics(tr::now), cUseOriginalMetrics())
 , _about(st::boxWidth - st::boxPadding.left() * 1.5)
 {
 }
@@ -55,8 +56,9 @@ void FontsBox::prepare() {
 		+ _semiboldFontName->height()
 		+ _semiboldIsBold->height()
 		+ _monospacedFontName->height()
+		+ _useOriginalMetrics->height()
 		+ _aboutHeight
-		+ st::boxLittleSkip * 2);
+		+ st::boxLittleSkip * 3);
 }
 
 
@@ -70,7 +72,8 @@ void FontsBox::paintEvent(QPaintEvent *e) {
 		+ _semiboldFontName->height()
 		+ _semiboldIsBold->height()
 		+ _monospacedFontName->height()
-		+ st::boxLittleSkip * 2;
+		+ _useOriginalMetrics->height()
+		+ st::boxLittleSkip * 3;
 	p.setPen(st::windowSubTextFg);
 	_about.drawLeft(p, st::boxPadding.left(), abouty, w, width());
 
@@ -90,6 +93,8 @@ void FontsBox::resizeEvent(QResizeEvent *e) {
 	_semiboldIsBold->moveToLeft(st::boxPadding.left(), _semiboldFontName->y() + _semiboldFontName->height() + st::boxLittleSkip);
 	_monospacedFontName->resize(w, _monospacedFontName->height());
 	_monospacedFontName->moveToLeft(st::boxPadding.left(), _semiboldIsBold->y() + _semiboldIsBold->height());
+	_useOriginalMetrics->resize(w, _useOriginalMetrics->height());
+	_useOriginalMetrics->moveToLeft(st::boxPadding.left(), _monospacedFontName->y() + _monospacedFontName->height() + st::boxLittleSkip);
 }
 
 void FontsBox::setInnerFocus() {
@@ -102,6 +107,7 @@ void FontsBox::save() {
 	const auto semiboldFont = _semiboldFontName->getLastText().trimmed();
 	const auto semiboldIsBold = _semiboldIsBold->checked();
 	const auto monospacedFont = _monospacedFontName->getLastText().trimmed();
+	const auto useOriginalMetrics = _useOriginalMetrics->checked();
 
 	const auto changeFonts = [=] {
 		cSetUseSystemFont(useSystemFont);
@@ -109,6 +115,7 @@ void FontsBox::save() {
 		cSetSemiboldFont(semiboldFont);
 		cSetSemiboldFontIsBold(semiboldIsBold);
 		cSetMonospaceFont(monospacedFont);
+		cSetUseOriginalMetrics(useOriginalMetrics);
 		KotatoSettings::Write();
 		App::restart();
 	};
