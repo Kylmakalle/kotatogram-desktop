@@ -420,6 +420,7 @@ jobs:
           cp -r $QT_PREFIX $LibrariesPath/qt-cache
 
       - name: Kotatogram Desktop build.
+        continue-on-error: true
         if: env.ONLY_CACHE == 'false'
         run: |
           cd $REPO_NAME/Telegram
@@ -438,14 +439,14 @@ jobs:
           bash -c "$xcoderun" || bash -c "$xcoderun" || bash -c "$xcoderun"
 
       - name: Move artifact.
-        if: always() && env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true'
         run: |
           cd $REPO_NAME/out/Release
           mkdir artifact
           mv Kotatogram.app artifact/
           mv Updater artifact/
       - uses: actions/upload-artifact@master
-        if: always() && env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true'
         name: Upload artifact.
         with:
           name: Kotatogram
