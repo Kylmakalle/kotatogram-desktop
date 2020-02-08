@@ -1,4 +1,4 @@
-name: MacOS.
+name: MacOS-Release.
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
 
   macos:
-    name: MacOS-Release
+    name: MacOS
     runs-on: macos-latest
 
     strategy:
