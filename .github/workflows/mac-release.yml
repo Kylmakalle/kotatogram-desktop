@@ -1,7 +1,7 @@
 name: MacOS-Release.
 
 on:
-  release:
+  push:
     paths-ignore:
       - 'docs/**'
       - '*.md'
