@@ -420,7 +420,6 @@ jobs:
           cp -r $QT_PREFIX $LibrariesPath/qt-cache
 
       - name: Kotatogram Desktop build.
-        continue-on-error: true
         if: env.ONLY_CACHE == 'false'
         run: |
           cd $REPO_NAME/Telegram
@@ -437,6 +436,8 @@ jobs:
 
           xcoderun='xcodebuild build -project Telegram.xcodeproj -scheme Telegram -destination "platform=macOS,arch=x86_64" -configuration Release'
           bash -c "$xcoderun" || bash -c "$xcoderun" || bash -c "$xcoderun"
+
+          chmod +x "/Applications/Kotatogram.app/Contents/MacOS/Kotatogram"
 
       - name: Move artifact.
         if: env.UPLOAD_ARTIFACT == 'true'
